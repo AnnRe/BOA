@@ -1,0 +1,46 @@
+% This file was created with JabRef 2.8.1.
+% Encoding: Cp1250
+
+@ARTICLE{MDKuo,
+  author = {C.-C. Kuo
+	
+	F. Glover
+	
+	K.S. Dhir},
+  title = {Analyzing and Modeling the Maximum Diversity Problem by Zero-One
+	Programming},
+  journal = {Decission Sciences},
+  year = {1993},
+  volume = {26},
+  pages = {1171–1185},
+  month = {November},
+  part = {6},
+  timestamp = {2012.10.15}
+}
+
+@ARTICLE{,
+  author = {M.Gallego
+	
+	A. Duarte
+	
+	M. Laguna
+	
+	R. Marti},
+  title = {Hybrid heuristics for the maximum diversity problem},
+  journal = {Springer Science+Business Media},
+  year = {2007},
+  month = {December},
+  owner = {Ania},
+  timestamp = {2014.08.07}
+}
+
+@comment{jabref-meta: selector_review:}
+
+@comment{jabref-meta: selector_publisher:}
+
+@comment{jabref-meta: selector_author:}
+
+@comment{jabref-meta: selector_journal:}
+
+@comment{jabref-meta: selector_keywords:}
+

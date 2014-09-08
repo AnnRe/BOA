@@ -1,0 +1,55 @@
+% This file was created with JabRef 2.10.
+% Encoding: Cp1250
+
+
+@Article{MDKuo,
+  Title                    = {Analyzing and Modeling the Maximum Diversity Problem by Zero-One Programming},
+  Author                   = {C.-C. Kuo, F. Glover, K.S. Dhir},
+  Journal                  = {Decission Sciences},
+  Year                     = {1993},
+
+  Month                    = {November},
+  Pages                    = {1171–1185},
+
+  Part                     = {6},
+  Timestamp                = {2012.10.15}
+}
+
+@Article{MDGallego,
+  Title                    = {Hybrid heuristics for the maximum diversity problem},
+  Author                   = {M.Gallego, A. Duarte, M. Laguna, R. Marti},
+  Journal                  = {Springer Science+Business Media},
+  Year                     = {2007},
+
+  Month                    = {December},
+  Pages                    = {411-426},
+  Volume                   = {44},
+
+  Part                     = {Computational Optimization and Applications},
+  Timestamp                = {2014.08.07}
+}
+
+@PhdThesis{Pelik2002,
+  Title                    = {Bayesian optimization algorithm: From single level to hierarchy},
+  Author                   = {M. Pelikan},
+  School                   = {University of Illinois at Urbana-Champaign},
+  Year                     = {2002},
+
+  Address                  = {Urbana, Illinois},
+
+  Owner                    = {Ania},
+  Timestamp                = {2014.08.07}
+}
+
+@comment{jabref-meta: selector_review:}
+
+@comment{jabref-meta: selector_publisher:}
+
+@comment{jabref-meta: selector_issue:}
+
+@comment{jabref-meta: selector_author:}
+
+@comment{jabref-meta: selector_journal:}
+
+@comment{jabref-meta: selector_keywords:}
+

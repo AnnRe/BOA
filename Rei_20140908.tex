@@ -1,0 +1,464 @@
+\documentclass[oneside,30pt]{article}
+\usepackage{polski}
+\usepackage[cp1250]{inputenc}
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{setspace}
+\usepackage[margin=60px]{geometry}
+\usepackage{graphicx}
+\usepackage{bbm}
+\usepackage{color}
+
+\begin{document}
+%\doublespacing
+%\LARGE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Wprowadzenie}
+
+W licznej grupie algorytmów populacyjnych, w ostatnim czasie coraz wiêksz¹ rolê odgrywaæ zaczynaj¹ algorytmy wykorzystuj¹ce modele probabilistyczne.
+
+S¹ to najczêœciej metody o strukturze bardzo podobnej do struktury algorytmu ewolucyjnego, z t¹ ró¿nic¹, ¿e kolejne pokolenia osobników/rozwi¹zañ generowane s¹ na bazie modelu probabilistycznego populacji rozwi¹zañ obiecuj¹cych, nie zaœ jako efekt krzy¿owania b¹dŸ mutacji osobników z populacji bie¿¹cej.
+
+Populacja rozwi¹zañ obiecuj¹cych powstaje z osobników wy³onionych w wyniku klasycznej selekcji (zwykle turniejowej). W populacji takiej pojawiaj¹ siê osobniki o wy¿szym od œredniego przystosowaniu, a zbudowany na ich podstawie model powinien promowaæ te cechy rozwi¹zania, które prowadz¹ do optymalizowanego celu.\\
+Kolejne pokolenie rozwi¹zañ generowane jest w sposób pseudolosowy, ale z uwzglêdnieniem modelu probabilistycznego. Oznacza to, ¿e w metodach tego typu sposób budowania modelu odpowiada zarówno za sam¹ zbie¿noœæ, jak i jej tempo.\\
+Aby w pe³ni wykorzystaæ cechy omawianych metod, nale¿y zadbaæ o taki sposób budowy modelu probabilistycznego, aby przy efektywnej zbie¿noœci nie utraciæ mo¿liwoœci w³aœciwego przeszukiwania przestrzeni. Jeœli populacja zbyt mocno bêdzie wp³ywa na zmiany modelu w kolejnych iteracjach, to mo¿e prowadziæ to do szybkiego ujednolicania populacji i niew³aœciwej eksploracji przestrzeni. Z drugiej strony, zbyt powolna zmiana modelu bêdzie sprawia³a, ¿e metoda optymalizacyjna w swoim dzia³aniu przypomina³a bêdzie przeszukiwanie losowe.
+
+To w jaki sposób budowany bêdzie model jest kluczowe z punktu widzenia tego typu metod. Pozosta³e elementy algorytmu, takie jak np. sukcesja, maj¹ zwykle klasyczn¹ formê (znan¹ z GA) i s³u¿¹ do prowadzenie procesu iteracyjnego.\\
+
+W prezentowanej pracy przedstawione zostan¹ dwie metody optymalizacyjne wykorzystuj¹ce model probabilistyczny. S¹ to metody w których zak³ada siê, ¿e   przeszukiwan¹ przestrzeni¹ jest zbiór ci¹gów binarnych.\\
+Model probabilistyczny bêdzie odpowiedzialny za to z jakim prawdopodobieñstwem pojawiaæ maj¹ siê w takich ci¹gach zera lub jedynki.
+
+Obie metody testowane bêd¹ na funkcjach, których optimum poszukuje siê w zbiorze ci¹gów binarnych.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Przegl¹d literatury}
+
+W pracy zaprezentowane zostan¹ dwie wersje algorytmów z modelem probabilistycznym \textit{PBIL} (\textit{ang. Population-based incremental learning}) oraz cGA (\textit{ang. Compact Genetic Algorithm}). Obie metody s¹ heurystykami populacyjnymi, które rozwa¿aj¹ populacjê w procesie iteracyjnym.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{PBIL}
+
+Pierwsz¹ z prezentowanych w pracy metod jest algorytm wykorzystuj¹cy proces uczenia oparty na ,,obserwacji" populacji bie¿¹cej, w skrócie \textit{PBIL} (\textit{ang. Population-based incremental learning}).
+
+W metodzie tej osobniki nale¿¹ce do kolejnych populacji/pokoleñ tworzone s¹ na podstawie wektora $\mathbf{p}\,=~
+\left[p_1,p_2,\ldots, p_m \right]$, którego sk³adowe $p_i$ okreœlaj¹ prawdopodobieñstwo wyst¹pienia jedynki na
+i-tej pozycji generowanego osobnika. Wektor ten pe³ni rolê modelu probabilistycznego.
+
+Charakterystyczne dla algorytmu \textit{PBIL} jest wykorzystanie do uaktualnienia wektora \textbf{p} wy³¹cznie najlepszego osobnika w pokoleniu bie¿¹cym.  Oznacza to, ¿e model {\color{blue} taki} powstaje w oparciu o jednego, najbardziej obiecuj¹cego osobnika, oznaczanego~\textbf{b}.
+
+Na pocz¹tku procesu przyjmuje siê, ¿e sk³adowe wektora \textbf{p} maj¹ jednakow¹ wartoœæ, równ¹ $\frac{1}{2}$. Generuje siê tak¿e populacjê startow¹
+(z rozk³adem równomiernym, {\color{blue} czyli zgodnie z modelem reprezentowanym przez $\mathbf{p}$}) sk³adaj¹c¹ siê z ci¹gów 0--1 o d³ugoœci $k$.
+
+W kolejnych iteracjach, sk³adowe wektora \textbf{p} uaktualnia siê wed³ug wzoru:
+\begin{equation}
+p_i^{(k+1)} = (1-\lambda )\cdot p_i^{(k)} + \lambda b_i,
+\end{equation}
+gdzie $p_i^{(k)}$ to i-ta sk³adowa wektora \textbf{p} w pokoleniu $k$, $b_i$ -- sk³adowa {\color{blue} bie¿¹cego} wektora \textbf{b}, a $\lambda$-- tzw. wspó³czynnik uczenia.
+
+Osobniki populacji $k+1$ losowane s¹ zawsze z uwzglêdnieniem aktualnego wektora prawdopodobieñstw. W~przeciwieñstwie do standardowego algorytmu genetycznego, \textit{PBIL} nie zachowuje najlepszego osobnika w populacji, ale specyfika procedury daje ogromne szanse na jego wylosowanie, gdy¿ w³aœnie na jego podstawie modyfikowany jest model probabilistyczny. Losowanie ca³ej populacji, uwzglêdniaj¹ce model (reprezentowany przez \textbf{p}) daje spore szanse na pojawienie siê wiêkszej liczby ,,dobrych" (z punktu widzenia funkcji celu) osobników, zwykle lepszych ni¿ w poprzedniej generacji.\\
+Wartoœæ wspó³czynnika uczenia $\lambda$ jest perametrem ustalanym na pocz¹tku procesu iteracyjnego i ma wp³yw na jego przebieg. Nale¿y pamiêtaæ, ¿e ma³a jego wartoœæ spowalnia modyfikacjê modelu, a zbyt du¿a mo¿e wp³ywaæ na zbyt szybkie ujednolicenie populacji. Wspó³czynnik $\lambda$ powinien byæ dobrany tak, aby równowa¿yæ zdolnoœæ do ukierunkowanej eksploracji z mo¿liwoœci¹ eksploatacji przestrzeni.\\
+
+Poni¿ej przedstawiono schemat metody {\color{blue} PBIL}.\\
+
+\begin{minipage}[5cm]{15cm}
+\hrule
+\vspace{1em}
+procedure \it{PBIL}:
+\begin{enumerate}
+\item Losowanie populacji startowej, zainicjowanie wektora prawdopodobieñstw
+$\mathbf{p},\; (p_i =0.5, \forall i=1,\ldots,n)$
+\item Ocena osobników, wybór najlepszego wektora \textbf{b}.
+\item Modyfikacja sk³adowych wektora prawdopodobieñstw $\mathbf{p}$ wed³ug wzoru
+\begin{equation}
+\nonumber
+p_i = (1-\lambda )\cdot p_i + \lambda \cdot b_i,
+\end{equation}
+gdzie $\lambda\text{ -- wspó³czynnik uczenia}$
+\item Wylosowanie nowej populacji zgodnie z modelem (z uwzglêdnieniem aktualnego \textbf{p})
+\item Sprawdzenie warunku zatrzymania, jeœli spe³niony -- zakoñczenie algorytmu, w przeciwnym razie powrót do 2.
+\end{enumerate}
+\hrule
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{cGA}
+
+Kolejnym omawianym w pracy algorytmem {\color{blue} jest cGA (\textit{ang. Compact Genetic Algorithm}), metoda bêd¹ca modyfikacj¹ AG i wykorzystuj¹ca model probabilistyczny.}
+
+Podobnie jak w \textit{PBIL}, kolejne pokolenia osobników tworzone s¹ w oparciu o model probabilistyczny. Model budowany jest w oparciu o rozwi¹zania z pokolenia bie¿¹cego, przy czym w jego konstrukcji rolê odgrywa zarówno najlepszy, jak i najgorszy osobnik. Rolê modelu ponownie pe³ni wektor prawdopodobieñstw \textbf{p}, którego sk³adowe wyznacza siê wed³ug wzoru:
+\begin{equation}
+{p_i} = \left\{\begin{array}{l l}
+p_i+\frac{1}{m}, & x_i=1 \land y_i = 0\\[0.3 em]
+p_i-\frac{1}{m}, & x_i=0 \land y_i = 1\\[0.3 em]
+p_i, & \text{pozosta³e}
+\end{array}\right.
+\label{eq:2}
+\end{equation}
+gdzie  $\mathbf{x}=\left[x_1, \ldots, x_k \right]$ i $\mathbf{y}=\left[y_1, \ldots, y_k \right]$ to odpowiednio najlepszy i najgorszy osobnik w populacji, zaœ $m$ to liczebnoœæ populacji.\\
+
+Tak jak w poprzedniej metodzie, sk³adowe wektora \textbf{p} okreœlaj¹ prawdopodobieñstwo wystêpowania $1$ na i-tym miejscu osobnika generowanego do kolejnej populacji. Wspó³czynnik $\frac{1}{m}$ pe³ni we wzorze \eqref{eq:2} rolê wspó³czynnika uczenia siê i mo¿e byæ zast¹piony dowoln¹ inn¹, ustalon¹ wielkoœci¹. Dziêki wykorzystaniu najlepszego i najgorszego osobnika z pokolenia bie¿¹cego, algorytm cGA pozwala efektywniej tworzyæ model probabilistyczny. Procedura budowy wektora \textbf{p} sprawia, ¿e szansa wylosowania osobnika zbli¿onego do najlepszego roœnie, a najgorszego maleje.\\
+
+Schemat algorytmu zaprezentowano poni¿ej w formie pseudokodu.\\
+
+%\noindent\rule[0.5cm]{\textwidth}{1pt}
+
+\begin{minipage}[5cm]{15cm}
+\hrule
+\vspace{1em}
+procedure \it{cGA}
+\begin{enumerate}
+\item Losowanie populacji startowej, zainicjowanie wektora prawdopodobieñstw \textbf{p} (wszystkie wartoœci $p_i = 0.5, i= 1, \ldots, n$).
+\item Ocena osobników, wybór najlepszego i najgorszego (porównanie z najlepszym i najgorszym z poprzedniej populacji {\color{red} po co?}).
+\item Obliczenie wektora prawdopodobieñstw wed³ug wzoru
+\begin{equation}
+\nonumber
+{p_i} = \left\{\begin{array}{l l}
+p_i+\frac{1}{m}, & x_i=1 \land y_i = 0\\[0.3 em]
+p_i-\frac{1}{m}, & x_i=0 \land y_i = 1\\[0.3 em]
+p_i, & \text{pozosta³e}
+\end{array}\right.
+\end{equation}
+\item Wygenerowanie nowej populacji z uwzglêdnieniem prawdopodobieñstw \textbf{p}
+\item Sprawdzenie warunku zatrzymania, jeœli spe³niony -- zakoñczenie algorytmu, w przeciwnym razie powrót do punktu 2.
+\end{enumerate}
+\hrule
+\end{minipage}
+%\noindent\rule[0.5cm]{\textwidth}{1pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Opis zadañ testowych}
+
+W ramach prezentowanej pracy optymalizacji poddano trzy funkcje testowe. We wszystkich przypadkach przyjmowano, ¿e poszukiwane rozwi¹zanie jest $k-$elementowym ci¹giem binarnym. Za³o¿enie to by³o wymuszone specyfik¹ omawianych metod optymalizacyjnych.
+
+Ka¿da z testowanych funkcji mia³a odmienny charakter, aby mo¿liwe by³o jak najlepsze rozpoznanie zalet i wad prezentowanych heurystyk.
+
+%---------------------------------------------------------------------------
+\subsection{$trap_n$}
+%---------------------------------------------------------------------------
+
+Pierwsz¹ funkcj¹ testow¹ by³a funkcja $trap_n$ dana wzorem:
+\begin{equation}
+\label{eq:trap}
+f_{trap_n}(\mathbf{u})=\left\{\begin{array}{l l}
+n-1-u_1, & \text{dla } u_1 < n \\[0.3 em]
+n, & \text{w pozosta³ych przypadkach}\\[0.3 em]
+\end{array}\right.,
+\end{equation}
+gdzie $n$ oznacza rz¹d funkcji, a $u_1$ to liczba jedynek wystêpuj¹cych z wektorze $\mathbf{u}$.\\
+Zwykle przyjmuje siê, ¿e rz¹d funkcji $trap_n$ jest taki sam jak wymiar zadania, tzn. $k = n$\\
+Przyk³adowo, funkcja $trap_5$ wyra¿a siê wzorem:
+$$f_{trap_5}(\mathbf{u})=\left\{\begin{array}{l l}
+4-u_1, & \text{dla } u_1 < 5 \\[0.3 em]
+5, & \text{w pozosta³ych przypadkach}\\[0.3 em]
+\end{array}\right., $$
+i osi¹ga swoje maksimum globalne, o wartoœci 5, dla $\mathbf{u}_{opt} = (1,1,1,1,1)$.\\
+
+W odró¿nieniu od klasycznie wykorzystywanej do testów funkcji OneMax, wartoœci funkcji $trap_n$ nie zale¿¹ liniowo od liczby jedynek w wektorze $\mathbf{u}$, co mo¿e byæ dodatkow¹ trudnoœci¹ w optymalizacji (rys.\ref{trapFig}).
+
+%TODO wykres
+\begin{figure}[h]
+  \centering
+  % Requires \usepackage{graphicx}
+%  \includegraphics[width=5cm]{trap5.png}\\
+  \caption{Wykres funkcji $trap_5$}\label{trapFig}
+\end{figure}
+
+%---------------------------------------------------------------------------
+\subsection{$3-deceptive$}
+%---------------------------------------------------------------------------
+
+Drug¹ testowan¹ w ramach pracy funkcj¹ by³a funkcja $3-deceptive$ zadana wzorem:
+\begin{equation}
+\label{eq:3deceptive}
+f_{3deceptive}(\mathbf{u})=\left\{\begin{array}{l l}
+0.9, & \text{dla } u_1 = 0 \\[0.3 em]
+0.8, & \text{dla } u_1 = 1\\[0.3 em]
+0, & \text{dla } u_1 = 2\\[0.3 em]
+1, & \text{w pozosta³ych przypadkach}\\[0.3 em]
+\end{array}\right..
+\end{equation}
+Podobnie jak w poprzednim przypadku $u_1$ oznacza liczbê sk³adowych wektora $\mathbf{u}$, które przyjmuj¹ wartoœæ 1.\\ Jest to funkcja posiadaj¹ca jedno minimum globalne oraz dwa, niewiele ró¿ni¹ce siê co do wartoœci, maxima lokalne. Dodatkowo, jeœli tylko d³ugoœæ $k$ wektora $\mathbf{u}$ jest wiêksza od $3$, maximum globalne o wartoœci $1$ osi¹gane jest w wielu punktach. Sytuacja taka utrudnia optymalizacjê, gdy¿ nawet znacznie ró¿ni¹ce siê rozwi¹zania maj¹ dok³adnie tak¹ sam¹ jakoœæ.
+
+%TODO wykres
+
+\begin{figure}[h]
+  \centering
+  % Requires \usepackage{graphicx}
+%  \includegraphics[width=5cm]{3deceptive.png}\\
+  \caption{Wykres funkcji $3 deceptive$}
+\end{figure}
+
+%---------------------------------------------------------------------------
+\subsection{$MaxDiversity$}
+%---------------------------------------------------------------------------
+
+Ostatni¹ i równoczeœnie najciekawsz¹ funkcj¹ wykorzystan¹ do testów by³a funkcja $MaxDiversity$. W tym przypadku optymalizacja polega na znalezieniu w $k-$elementowym zbiorze $X$, $m-$elementowego podzbioru $A$, {\color{blue} do któego nale¿¹ punkty}, których suma wzajemnych odleg³oœci jest najwiêksza.\\
+Danymi wejœciowymi s¹ tutaj zbiór punktów $X$ oraz $m$ czyli liczba punktów, z których z³o¿ony ma byæ szukany podzbiór. {\color{blue} W zadaniu $MaxDiversity$ rozwi¹zania poszukuje siê w postaci wektora o $k$ sk³adowych z których $m$ ma wartoœæ jeden (jedynka na pozycji $i$ oznacza, ¿e $i$-ty punkt zbioru $X$ nale¿y do $A$).}
+
+Przyk³adowo, przyjmuj¹c za $X$ zbiór wierzcho³ków kwadratu jednostkowego i szukaj¹c 2-elementowego podzbioru $A$ spe³niaj¹cego powy¿sze za³o¿enia, otrzymaæ powinno siê parê przeciwleg³ych wierzcho³ków kwadratu (ich odleg³oœæ wynosi $\sqrt{2}$). Tak postawione zadanie ma oczywiœcie dwa równowa¿ne rozwi¹zania optymalne.\\
+
+Funkcja $MD$ ($MaxDiversity$), funkcja celu której maximum poszukujemy przyjmuje postaæ:
+$$\text{MD}(A,X)= \sum_{i=1}^{n-1} \sum_{j=i+1} ^{n} d(\mathbf{x}_i,\mathbf{x}_j),$$
+gdzie $A=\{\mathbf{x}_1,\,\mathbf{x}_2 \ldots \mathbf{x}_m\}$ to $m$-elementowy podzbiór {\color{blue} zbioru} $X$, a $d(\cdot,\cdot)$ to odleg³oœæ pomiêdzy punktami $\mathbf{x}_i$ oraz $\mathbf{x}_j$ {\color{blue} nale¿¹cymi do} zbioru $X$.\\
+Na potrzeby pracy przyjêto standardow¹ definicjê odleg³oœci - odleg³oœæ Euklidesow¹:
+$$d(\mathbf{x},\mathbf{y})=\sqrt{\sum_{i=1}^n \left( x_i - y_i\right)^2},$$
+gdzie $\mathbf{x} = (x_1,\, x_2, \ldots, x_n)$, $\mathbf{y} = (y_1,\, y_2, \ldots, y_n)$, {\color{blue} ($n$ - wymiar przestrzeni $X$)}.\\
+
+\newpage
+
+%---------------------------------------------------------------%
+\section{Wyniki testów}
+Celem testów numerycznych by³a ocena metod PBIL oraz cGA, ich porównanie oraz ewentualny dobór parametrów.
+
+Do rozwi¹zania ka¿dego z zadañ testowych wykorzystano obie metody, przy czy metodê PBIL testowano dodatkowo dla ró¿nych wspó³czynników uczenia. {\color{blue} Zmienniana by³a tak¿ê liczebnoœæ populacji.
+
+W pojedyñczym teœcie wykonywano 100 eksperymentów, przy czym eksperyment rozumie siê jako proceurê iteracyjn¹ prowadzon¹ do uzyskania rozwi¹zania dok³adnego, ale nie d³u¿ej ni¿ przez 100 iteracji. Za wynik testu przyjmowano œredni¹ (ze 100 eksperymentów) liczbê iteracji koniecznych do uzyskania rozwi¹zania optymalnego.}
+
+
+%---------------------------------------------------------------%
+\subsection{Funkcja $Trap_n$}
+\label{sec:trap}
+
+W ramach testów, {\color{blue} poszukiwano maximum} funkcji \textit{trap$_n$} dla ró¿nych wartoœci $n$.
+W ogólnym przypadku maksimum globalne funkcji $trap_n$ wynosi $n$ i jest osi¹gane w $u^{max} = \underbrace{\left(1,1, \ldots, 1\right)}_n $, tzn.
+$$ f_{trap_n}^{max} \underbrace{\left(1,1, \ldots, 1\right)}_n = n$$.
+
+Uzyskane rezultaty zamieszczono w tabelach poni¿ej.\\
+W nielicznych przypadkach, liczba 100 kroków iteracyjnych nie wystarcza³a do wyznaczenia maksimum globalnego. Wówczas w tabeli zamieszczono dodatkowo (w nawiasie) informacje o œrednim ({\color{red} trzeba napisaæ jak liczono ten b³¹d?}) b³êdzie rozwi¹zania w 100 doœwiadczeniach.
+W tabelach wyró¿niono dodatkowo przypadki, w których algorytm znalaz³ dok³adne rozwi¹zanie w (œrednio) najmniejszej  liczbie iteracji.
+
+\renewcommand{\arraystretch}{1.2}
+\begin{table}[h!]
+\caption{Wyniki testów na $trap_5$}
+\vspace{0.5em}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}\hline
+ & \multicolumn{6}{|c|}{\textit{Iloœæ iteracji (b³¹d)}}\\ \cline{2-7}
+& CGA  & \multicolumn{5}{|c|}{\textit{PBIL}} \\ \cline{3-7}
+\textbf{Liczebnoœæ populacji}  &   & $\lambda = 0.5$ &$\lambda = 0.2$ &$\lambda = 0.1$ &$\lambda = 0.01$ &$\lambda = 0.0001$  \\\hline\hline
+5 &\textbf{2.97} &24.62(0.58)&6.03(0.04)& 3.94    &5.94  & 6.77   \\\hline
+ 20 &1.77 &1.63 &\textbf{1.59} & 1.88    &  2.02 &  2.6  \\\hline
+ 50&\textbf{1.16} &1.2 & 1.18   & 1.21    & 1.32  & 1.21   \\\hline
+ \end{tabular}
+ \end{table}
+ \newpage
+
+\begin{table}[h!]
+\caption{Wyniki testów na $trap_6$}
+\vspace{0.5em}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}\hline
+ & \multicolumn{6}{|c|}{\textit{Iloœæ iteracji (b³¹d)}}\\ \cline{2-7}
+& CGA  & \multicolumn{5}{|c|}{\textit{PBIL}} \\ \cline{3-7}
+\textbf{Liczebnoœæ populacji}  &   & $\lambda = 0.5$ &$\lambda = 0.2$ &$\lambda = 0.1$ &$\lambda = 0.01$ &$\lambda = 0.0001$  \\\hline\hline
+ 5&\textbf{3.55} & 47.91(1.29) &13.76(0.3)& 6.76(0.03)& 10.6  &  12.46(0.01)  \\\hline
+ 20&2.65 & 3.84(0.06) & \textbf{2.26}     &  2.6 &  3.05 &  3.44  \\\hline
+ 50 &1.71 & \textbf{1.42} &  1.46    &  1.53    & 1.63  &  1.71  \\\hline
+ 100 &1.24 & 1.22 &  1.25    &  \textbf{1.15}    & 1.19  & 1.19   \\\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\caption{Wyniki testów na $trap_7$}
+\vspace{0.5em}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}\hline
+ & \multicolumn{6}{|c|}{\textit{Iloœæ iteracji (b³¹d)}}\\ \cline{2-7}
+& CGA  & \multicolumn{5}{|c|}{\textit{PBIL}} \\ \cline{3-7}
+\textbf{Liczebnoœæ populacji}  &   & $\lambda = 0.5$ &$\lambda = 0.2$ &$\lambda = 0.1$ &$\lambda = 0.01$ &$\lambda = 0.0001$  \\\hline\hline
+ 5&\textbf{4.86} &63.61(1.84)&  34.72(0.92)  & 19.53(0.39)    &14.99   &   25.91(0.02) \\\hline
+ 20&\textbf{3.08} & 15.71(0.41)   &  4.(0.03)  &  3.76   & 5.61  & 7.89   \\\hline
+ 50 &2.42 &  2.81(0.03)  &   \textbf{2.06} & 2.18 &2.59   &  3.08  \\\hline
+ 100 &1.61 &  1.43  & \textbf{ 1.42}  &  1.44   &  1.65 &  1.76  \\\hline
+ 200 &1.22 &   \textbf{1.16} &  1.26  &  1.19   & 1.26  &  1.2  \\\hline
+\end{tabular}
+\end{table}
+\newpage
+
+\begin{table}[h!]
+\caption{Wyniki testów na $trap_{10}$}
+\vspace{0.5em}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}\hline
+ & \multicolumn{6}{|c|}{\textit{Iloœæ iteracji (b³¹d)}}\\ \cline{2-7}
+& CGA  & \multicolumn{5}{|c|}{\textit{PBIL}} \\ \cline{3-7}
+\textbf{Liczebnoœæ populacji}  &   & $\lambda = 0.5$ &$\lambda = 0.2$ &$\lambda = 0.1$ &$\lambda = 0.01$ &$\lambda = 0.0001$  \\\hline\hline
+ 5&\textbf{5.42} & 141.76(3.6)& 71.36(2.59) & 56.78(1.8)& 42.21(0.06)&   78.45(0.97) \\\hline
+ 20&\textbf{6.18} & 84.58(1.97)& 30.72(0.92) & 12.78(0.18)& 20.21&  40.79(0.13)  \\\hline
+ 50 &6.27 & 37.64(0.77)&7.78(0.12)& \textbf{4.79} & 12.49  &  21.14(0.01)  \\\hline
+ 100 &5.76 & 7.94(0.12) & \textbf{2.86}  & 3.85 & 7.42  &  10.82  \\\hline
+ 200 &4.78 &  4.78(0.06)&\textbf{ 2.22}  & 2.79 & 4.7  & 4.88   \\\hline
+ 500 &2.49 &  1.79   &  \textbf{1.66}   & 1.69  & 2.16  & 2.28\\\hline
+\end{tabular}
+\end{table}
+
+\textbf{Podsumowanie:} Z przeprowadzonych testów wynika, ¿e dla funkcji $trap_n$ metoda \textit{cGA} sprawdza siê lepiej od \textit{PBIL} w przypadku mniejszej licznych populacji, ale gdy do obliczeñ mo¿na wykorzystaæ wiêksze populacje, b³¹d metody \textit{PBIL} spada do zera i szukane maksimum znajdowane jest w mniejszej liczbie korkó ni¿ w przypadku \textit{cGA}. \\
+Jeœli chodzi o zale¿noœæ iloœæ iteracji w stosunku do wspó³czynnika uczenia siê, to trudno sformu³owaæ uogólnione wnioski. Na przyk³ad dla populacji 50 osobników lepszy rezultat uzyskiwany jest dla $\lambda\,=0.1$, a dla populacji dwukrotnie wiêkszej $\lambda\,=0.2$ daje lepsze rezultaty.\\
+Dodatkowo warto zauwa¿yæ, ¿e wraz ze wzrostem rzêdu $n$, roœnie z³o¿onoœæ funkcji $trap_n$, co oczywiœcie wp³ywa na czas pracy obu metod. Jeœli wiêc istnieje potrzeba optymalizacji przy wukorzystaniu  mniejszych populacji, algorytm cGA wydaje siê byæ lepszym wyboram. Wykorzystuj¹c PBIL, najbezpieczniejsz¹ wartoœci¹ $\lambda$ jest $0.01$, (dla tej wartoœci ryzyko nieuzyskania dok³adnego wyniku by³o najmniejsze).\\
+
+\newpage
+
+%---------------------------------------------------------------%
+\subsection{3-deceptive }
+Funkcja \textit{3-deceptive} osi¹ga maksimum globalne o wartoœci $1$ jeœli co najmniej 3 ze sk³adowych wektora s¹ jedynkami.\\
+W pracy rozwa¿ono 3 warianty funkcji, okreœlonej ogólnym wzorem \eqref{eq:3deceptive}:\\
+W wariancie pierwszym, rozwi¹zania poszukiwano w zbiorze wektorów d³ugoœci 3, co implikuje istnienie dok³adnie jednego ekstremum globalnego. W pozosta³ych przypadkach funkcja \textit{3-deceptive} przyjmuje optimum w kilku ró¿nych punktach przestrzeni.\\
+Dok³adniej mówi¹c, dla wektorów $n$-elementowych,
+$$f_{3deceptive}^{max}(u) = 1,$$
+dla ka¿dego $u\in A,$, gdzie $A$--zbiór wektorów z co najmniej trzema jedynkami.\\
+
+Interpretacja wyników przedstawionych w tabelach jest analogiczna jak w punkcie \ref{sec:trap}.
+
+\subsubsection*{Wariant 1 - przestrzeñ wektorów d³ugoœci 3}
+\begin{table}[h!]
+%\arraystretch{1.5}
+\caption{Wyniki testów na $3-deceptive$ dla wektorów d³.3}
+\vspace{0.5em}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}\hline
+ & \multicolumn{6}{|c|}{\textit{Iloœæ iteracji (b³¹d)}}\\ \cline{2-7}
+& CGA  & \multicolumn{5}{|c|}{\textit{PBIL}} \\ \cline{3-7}
+\textbf{Liczebnoœæ populacji}  &   & $\lambda = 0.5$ &$\lambda = 0.2$ &$\lambda = 0.1$ &$\lambda = 0.01$ &$\lambda = 0.0001$  \\\hline\hline
+ 5&1.8 &   6.26(0.01$^*$)  & \textbf{1.36}   &   1.84  & 1.77  &   1.89 \\\hline
+ 20&\textbf{0.92} & 1.01   & 0.97  &  0.93  &1.07   &0.94   \\\hline
+ 50 &0.87 &  0.87 &\textbf{0.84}   &  0.86  &0.88  &  0.88 \\\hline
+ 100 &0.89 & 0.84  &  0.86  &0.88    &0.91  &\textbf{0.83  } \\\hline
+ 200 &0.87  & 0.86  & \textbf{0.85}   & \textbf{ 0.85  } &0.86  &0.89 \\\hline
+ 500 &\textbf{0.82} &  0.91  &  0.86  &   \textbf{0.82}  & 0.93  &  0.84 \\\hline
+\end{tabular}\\
+$^*$ -- algorytm \textit{PBIL} dla optymalizowanej funkcji, $\lambda = 0.5$ i bardzo ma³ej populacji (5 osobnikó) zwróci³ niedok³adn¹ wartoœæ.
+\end{table}
+\textbf{Podsumowanie} W przypadku najmniej licznej populacji oraz wspó³czynnika uczenia siê na poziomie $0.5$ algorytm PBIL nie zawsze w 100 iteracjach znajdowa³ wynik dok³adny. Przyczyn¹ jest tutaj z pewnoœci¹ zbyt szybkie (du¿a wartoœæ $\lambda$) zdominowanie populacji przez jednego osobnika.  Ka¿da inna konfiguracja parametrów daje bardzo zbli¿one rezultaty.\\
+W przypadku tak sformu³owanego zadania, nie ma znacznej ró¿nicy miêdzy dzia³aniem algorytmów \textit{cGA} a \textit{PBIL}.
+
+\subsubsection*{Wariant 2 - przestrzeñ wektorów d³ugoœci 5}
+\begin{table}[h!]
+\caption{Wyniki testów na $3-deceptive$ dla wektorów d³.5}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}\hline
+ & \multicolumn{6}{|c|}{\textit{Iloœæ iteracji (b³¹d)}}\\ \cline{2-7}
+& CGA  & \multicolumn{5}{|c|}{\textit{PBIL}} \\ \cline{3-7}
+\textbf{Liczebnoœæ populacji}  &   & $\lambda = 0.5$ &$\lambda = 0.2$ &$\lambda = 0.1$ &$\lambda = 0.01$ &$\lambda = 0.0001$  \\\hline\hline
+ 5&\textbf{0.41} & 0.61  &0.47   & 0.53   &0.55  &0.57   \\\hline
+ 20&0.51 & 0.43  & \textbf{0.40}  &  \textbf{0.40}  &0.49  &   0.61\\\hline
+ 50 &0.53 & 0.58  & \textbf{0.47}  &0.48    &0.59  & \textbf{0.47}  \\\hline
+ 100 &0.50 & 0.52  &0.5   & 0.48   & \textbf{0.43} & 0.48  \\\hline
+ 200 &\textbf{0.48} &0.61   & 0.51  & 0.54   &0.5   & 0.54  \\\hline
+ 500 &0.52 & 0.47  & \textbf{0.46}  &  0.58  &0.55  & 0.5  \\\hline
+\end{tabular}
+\end{table}
+\textbf{Podsumowanie:} Metoda daje porównywalnie dobre rezultaty w przypadku obu stosowanych algorytmów. W tym przypadku dobór wspó³czynnika uczenia siê nie ma znacznego wp³ywu na rezultat. W wielu eksperymentach na dok³optymalny wynik trafiono w iteracji zerowej. {\color{red} Czy w zadaniu obserwowano tylko wartoœc funkcji, czy te¿ zwracano uwagê na to dla jekiego wektora zosta³¹ ona znaleziona?}
+
+{\color{red} nie wiem czy nie zrezygnowaæ z tego testu :/}
+\subsubsection*{Wektory 10-cio elementowe}
+\begin{table}[h!]
+\caption{Wyniki testów na $3-deceptive$ dla wektorów d³.10}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}\hline
+ & \multicolumn{6}{|c|}{\textit{Iloœæ iteracji (b³¹d)}}\\ \cline{2-7}
+& CGA  & \multicolumn{5}{|c|}{\textit{PBIL}} \\ \cline{3-7}
+\textbf{Liczebnoœæ populacji}  &   & $\lambda = 0.5$ &$\lambda = 0.2$ &$\lambda = 0.1$ &$\lambda = 0.01$ &$\lambda = 0.0001$  \\\hline\hline
+ 5&0.11  &\textbf{0.02}   & 0.07  &  0.05  &0.1  &  0.04 \\\hline
+ 20 &0.06   & \textbf{0.03}  & 0.05  & 0.06   &0.07  &0.05   \\\hline
+ 50 &0.06   &0.05   &\textbf{0.02}   &    0.08& \textbf{0.02} & 0.07  \\\hline
+ 100 &0.13   &0.07   &  0.02 &   \textbf{0.0} &0.03  & 0.1  \\\hline
+ 200 &0.05   & 0.06  & \textbf{0.04}  &   0.07 &  0.08& 0.02  \\\hline
+ 500 &0.04   &\textbf{ 0.03}  &  0.06   &0.06  &0.04 &0.04 \\\hline
+\end{tabular}
+\end{table}
+
+\textbf{Podsumowanie:} Metoda dzia³a lepiej im d³u¿y jest wektor i populacja jest bardziej liczna. B³¹d wystêpuje w pojedynczym przypadku, gdy badamy ma³¹ populacjê i przyjmiemy w algorytmie stosunkowo wysoki wspó³czynnik uczenia siê ($\lambda = 0.5$). Dla problemu \textit{3-deceptive} i wektora $n$-elementowego wystarczy wybraæ populacjê 20 elementow¹ i dowolny wspó³czynnik uczenia, gdy¿ dla ka¿dego z przyjêtych parametrów czas wyznaczania maksimum nie przekracza jednej iteracji zarówno dla \textit{cGA}, jak i \textit{PBIL}. Dla wektorów d³ugoœci powy¿ej 10, liczba iteracji jest bliska zeru, poniewa¿ prawdopodobieñstwo wylosowania na starcie wektora z co najmniej trzema jedynkami jest bardzo du¿e i roœnie wraz ze wzrostem d³ugoœci wektora. Moc zbioru rozwi¹zañ $A$ dla wektora d³ugoœci $n$ wynosi bowiem
+$$\|A\| = \sum_{i=3}^n \binom{n}{i},$$
+co daje prawdopodobienstwo wylosowania ekstremum równe
+$$P = \frac{\sum_{i=3}^n \binom{n}{i}}{2^n}\underset{n \to \infty}{\longrightarrow}=1$$
+\newpage
+\subsection{MaxDiversity}
+W przypadku funkcji $MaxDiversity$, zadanie polega na znalezieniu $m$-elementowego podzbioru $A$ danego zbioru $X$ (o mocy $k$). Rozwi¹zanie reprezentowne jest przez $k$-elementowy wektor binarny, przy czym jedynka na $i$-tej pozycji oznacza, ¿e $i$-ty element zbioru $X$ nale¿y do podzbioru $A$.
+Ze wzglêdu na odmienn¹ naturê problemu, b³¹d rozwi¹zania bêdzie przedstawiany w skali procentowej. Wielkoœæ t¹ nale¿y rozumieæ jako odsetek poprawnie wyznaczonych rozwi¹zañ w 100 doœwiadczeniach. Podobnie jak w poprzednich testach, kryterium zatrzymania algorytmu jest znalezienie rozwi¹zania optymalnego, b¹dŸ wykonanie maksymalnej dopuszczalnej liczby iteracji (wówczas za rozwi¹zanie przyjmuje siê najlepszy uzyskany wynik).
+
+\subsubsection{$X$ - wierzcho³ki kwadratu w przestrzeni 2-wymiarowej}
+
+W zadaniu szukamy $n$-elementowego podzbioru zbioru wierzcho³ków
+$$X=\{(0,0), (0,1), (1,0), (1,1)\},$$
+takiego, aby suma odleg³oœæ pomiêdzy punktami by³a najwiêksza.
+
+\begin{enumerate}
+\item Szukamy pary punktów ($m=2$) ze zbioru $X$, których odleg³oœæ jest maksymalna.\\
+W tym wypadku rozwi¹zanie optymalne to
+$$\text{MD}^{max}(A,X) = \sqrt{2},$$
+gdzie $A=\{(0,0),\,(1,1) \}$ lub $A=\{(1,0),(0,1)\}$
+
+\begin{table}[h!]
+\caption{Wyniki testów na $Max Diversity$ dla wierzcho³ków kwadratu ($m=2$)}
+\vspace{0.5em}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
+  & \multicolumn{11}{|c|}{\textit{Iloœæ iteracji}}\\ \cline{2-12}
+\textbf{Liczebnoœæ} & CGA & \multicolumn{10}{|c|}{\textit{PBIL}} \\ \cline{3-12}
+\textbf{populacji} & &    \multicolumn{2}{|c|}{$\lambda = 0.5$} &\multicolumn{2}{|c|}{$\lambda = 0.2$} &\multicolumn{2}{|c|}{$\lambda = 0.1$} &\multicolumn{2}{|c|}{$\lambda = 0.01$} &\multicolumn{2}{|c|}{$\lambda = 0.0001$ } \\\hline\hline
+ 3&\textbf{2.03}  &2.26 &\textit{95\%}  & 2.14& \textit{99\%}  & 2.09&\textit{99\%}  &2.00 &\textit{98\%}  &  2.18 &\textit{95\%} \\\hline
+ 5&1.89  &1.96 & \textit{99\%}   & 1.88&\textit{100\%}  & \textbf{ 1.82}&\textit{100\% } &1.84&\textit{100\%}  &  \textbf{1.82}&\textit{100\%} \\\hline
+ 20 &\textbf{1.62}   & 1.73& \textit{100\%}  & 1.69&\textit{100\%}  & 1.64&\textit{100\% } &1.66&\textit{100\% }  &1.72&\textit{100\%}   \\\hline
+ 50 &1.68   &\textbf{1.62}& \textit{100\%}    &1.65&\textit{100\%  } &    1.73&\textit{100\% }& 1.7&\textit{100\% } & 1.7&\textit{100\%}  \\\hline
+ 100 &1.68   &\textbf{1.60}& \textit{100\% }   &  1.62&\textit{100\%} &   1.72&\textit{100\%} &1.66&\textit{100\%}  & 1.61&\textit{100\%}  \\\hline
+\end{tabular}
+\end{table}
+
+%\textbf{Wnioski:}
+%-------------------------------------------------%
+
+\item W zbiorze $X$ szukamy 3-elementowego podzbioru $A$.\\
+W tym przypadku, ka¿dy dowolny 3-elementowy podzbiór badanego problemu daje rozwi¹zanie optymalne $MD^{max}(A,X)= 2+\sqrt{2}$\\.
+
+Oba algorytmy zadzia³a³y poprawnie i zwróci³y dok³adne wartoœci ekstremum ju¿ na etapie losowania populacji startowej. W zwi¹zku z tym, nieistotny by³ dobór parametrów algorytmów, tj. liczebnoœci populacji i wspó³czynnika uczenia siê.
+%\begin{table}[h!]
+%\caption{Wyniki testów na $Max Diversity$ dla wierzcho³ków kwadratu ($m=3$)}
+%\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
+%  & \multicolumn{11}{|c|}{\textit{Iloœæ iteracji}}\\ \cline{2-12}
+%\textbf{Liczebnoœæ} &CGA  & \multicolumn{10}{|c|}{\textit{PBIL}} \\ \cline{3-12}
+%\textbf{populacji} & &    \multicolumn{2}{|c|}{$\lambda = 0.5$} &\multicolumn{2}{|c|}{$\lambda = 0.2$} &\multicolumn{2}{|c|}{$\lambda = 0.1$} &\multicolumn{2}{|c|}{$\lambda = 0.01$} &\multicolumn{2}{|c|}{$\lambda = 0.0001$ } \\\hline\hline
+% 3&1  &1 &\textit{100\% }  & 1&\textit{100\% }  & 1&\textit{100\% }  &1 &\textit{100\% }  &  1 &\textit{100\% } \\\hline
+% 5&1  &1 &\textit{100\% }   & 1&\textit{100\% }  &  1&\textit{100\% }  &1&\textit{100\% }  &  1&\textit{100\% } \\\hline
+% 20 &1   & 1&\textit{100\% }  & 1&\textit{100\% }  & 1&\textit{100\% } &1&\textit{100\% }  &1&\textit{100\% }   \\\hline
+% 50 &1   &1&\textit{100\% }    &1&\textit{100\% }   &    1&\textit{100\% }& 1&\textit{100\% } & 1&\textit{100\% }  \\\hline
+% 100 &1   &1&\textit{100\% }    &  1&\textit{100\% } &   1&\textit{100\% } &1&\textit{100\% }  & 1&\textit{100\% }  \\\hline
+%\end{tabular}
+%\end{table}\\
+\end{enumerate}
+\newpage
+\subsubsection{$X$ - zbiór 10 losowo wybranych punktów w kuli jednostkowej o œrodku w punkcie (0,0)}
+\begin{figure}[h!]
+\centering
+%\includegraphics[scale=.7]{kula0.png}
+\caption{Kula jednostkowa z punktami zbioru $X$}
+\end{figure}
+
+W zadaniu przyjêto, ¿e
+$X= \{ (0.5, -0.5),\,(0.4, 0.1),\,(-0.9, -0.1),\,(0.1,
+   0.12),\,(-0.32, 0.14),\,(-0.1,
+   0.58),$ \\ \indent$\,(0.911, 0.2),\,(-0.77, 0.58),\,(0.14, -0.85),\,(-0.14, -0.13)\}$ oraz ¿e w zbiorze $X$ poszukuje siê 3-elementowego podzbioru $A$.\\
+
+
+Dla tak sformu³owanego problemu rozwi¹zanie dok³adne to $A = \{(0.911,0.2),\,(-0.77,0.58),\,(0.14,-0.85) \}$, przy czym $MD^{max}(X,A) \simeq 4.721$ (rys. ???)
+
+\begin{figure}
+\centering
+%\includegraphics[scale=.7]{kula1.png}
+\caption{Maksymalna odleg³oœæ}
+\end{figure}
+
+W tabeli poni¿ej zaprezentowano wyniki uzyskane w eksperymentach numerycznych:
+
+\begin{table}[h!]
+\caption{Wyniki testów na $Max Diversity$ dla punktów kuli ($m=3$)}
+\vspace{0.5em}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}\hline
+  & \multicolumn{12}{|c|}{\textit{Iloœæ iteracji}}\\ \cline{2-13}
+\textbf{Liczebnoœæ} & \multicolumn{2}{|c|}{cGA} & \multicolumn{10}{|c|}{\textit{PBIL}} \\ \cline{4-13}
+\textbf{populacji} &\multicolumn{2}{|c|}{} &    \multicolumn{2}{|c|}{$\lambda = 0.5$} &\multicolumn{2}{|c|}{$\lambda = 0.2$} &\multicolumn{2}{|c|}{$\lambda = 0.1$} &\multicolumn{2}{|c|}{$\lambda = 0.01$} &\multicolumn{2}{|c|}{$\lambda = 0.0001$ } \\\hline\hline
+ 3&28.5&\textit{77\%}  &77.41 &\textit{24\%}  &39.07 &\textit{68 \%}  &23.26&\textit{92\%}  &\textbf{27.99} &\textit{99\%}  &  33.55 &\textit{93\%} \\\hline
+ 5&11.78&\textit{94\%}  &65.25 &\textit{40\%}   &26.57 &\textit{81\%}  &  \textbf{14.25}&\textit{100\% } &17.31&\textit{100\%}  & 25.59 &\textit{98\%} \\\hline
+ 20 &5.51&\textit{100\%}  & 12.43&\textit{91 \%}  & \textbf{4.55}&\textit{100\%}  &5.5 &\textit{100\%} &7.17&\textit{100\%}  &6.63&\textit{100\%}   \\\hline
+ 50 &3.72&\textit{100\% }  &\textbf{2.84}& \textit{100\%}    &3.2&\textit{100\%}   & 3.37 &\textit{100\% }& 4.12&\textit{100\%} & 4.12&\textit{100\% }  \\\hline
+ 100 &2.79&\textit{100\% }   &2.54&\textit{100\% }    & \textbf{2.46} &\textit{100\% } & 2.68 &\textit{100\% } &2.67&\textit{100\% }  &2.91&\textit{100\% }  \\\hline
+\end{tabular}
+\end{table}\\
+
+\textbf{Wnioski:}
+{\color{red} jeszcze to trzeba przemyœleæ}
+Jeœli rozwa¿amy przypadki w któych nie uda³o siê znaleŸæ rozwi¹zania dok³adnego, to warto zauwa¿yæ, ¿e algorytm \textit{cGA} zwraca poprawne wyniki dla populacji o mniejszej liczebnoœci. Porównuj¹c czas pracy algorytmów, mo¿na zauwa¿yæ, ¿e \textit{cGA} zwraca rezultat w krótszym czasie ni¿ \textit{PBIL}. Zarówno wysoki, jak i bardzo niski wskaŸnik uczenia siê  algorytmu \textit{PBIL} znacznie zmniejsza efektywnoœæ pracy algorytmu. Dodatkowo wskaŸnik rzêdu 0.5 powoduje wzrost czêstotliwoœci wyst¹pienia b³êdu w obliczeniach. Najbardziej optymaln¹ wartoœci¹ wspó³czynnika uczenia siê okaza³a siê wartoœæ $0.1$, dla której rezultaty \textit{cGA} i \textit{PBIL} s¹ zbli¿one
+
+\end{document}
