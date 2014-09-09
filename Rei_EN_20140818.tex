@@ -266,11 +266,13 @@ Ostatni¹ i równoczeœnie najciekawsz¹ funkcj¹ wykorzystan¹ do testów by³a funkcja
 \end{scriptsize}
 The last and in parallel most interesting function used for test was the $MaxDiversity$ function. In this case the optimalization problem is to find in $k--$element set $X$ an $m--$element subset $A$ where belong points which distance \ul{among} each other is the greatest.\\
 \begin{scriptsize}
-Danymi wejœciowymi s¹ tutaj zbiór punktów $X$ oraz $m$ czyli liczba punktów, z których z³o¿ony ma byæ szukany podzbiór. W zadaniu \textit{MaxDiversity} rozwi¹zania poszukuje siê w postaci wektora o \textit{k} sk³adowych z których \textit{m} ma wartoœæ jeden (jedynka na pozycji i oznacza, ze i-ty punkt zbioru \textit{X} nale¿y do \textit{A}).\\ 
+Danymi wejœciowymi s¹ tutaj zbiór punktów $X$ oraz $m$ czyli liczba punktów, z których z³o¿ony ma byæ szukany podzbiór A. W zadaniu \textit{MaxDiversity} rozwi¹zania poszukuje siê w postaci wektora o \textit{k} sk³adowych z których \textit{m} ma wartoœæ jeden (jedynka na pozycji i oznacza, ze i-ty punkt zbioru \textit{X} nale¿y do podzbioru \textit{A}).\\ 
 \end{scriptsize}
+Input is the set of points $X$ and $m$--number of points in the searched subset. In the \textit{MaxDiversity} problem the solution are searched in form of binary vector, where one at the i-th position means that the i-th point of set $X$ is in the subset $A$.\\
 \begin{scriptsize}
-Przyk³adowo, przyjmuj¹c za $X$ zbiór wierzcho³ków kwadratu jednostkowego i szukaj¹c 2-elementowego podzbioru $A$ spe³niaj¹cego powy¿sze za³o¿enia, otrzymaæ powinno siê parê przeciwleg³ych wierzcho³ków kwadratu (ich odleg³oœæ wynosi $\sqrt{2}$). Tak postawione zadanie ma oczywiœcie dwa rónowa¿ne rozwi¹zania optymalne.\\ 
+Przyk³adowo, przyjmuj¹c za $X$ zbiór wierzcho³ków kwadratu jednostkowego i szukaj¹c 2--elementowego podzbioru $A$ spe³niaj¹cego powy¿sze za³o¿enia, otrzymaæ powinno siê parê przeciwleg³ych wierzcho³ków kwadratu (ich odleg³oœæ wynosi $\sqrt{2}$). Tak postawione zadanie ma oczywiœcie dwa rónowa¿ne rozwi¹zania optymalne.\\ 
 \end{scriptsize}
+For example, assuming that $X$ is the \ul{set of square verticles} and we are searching for $2--$element subset $A$ satisfying that assumptions, we should get after the calculations pair of opposite verticles (distance between them is equal to $\sqrt{2}$).
 \begin{scriptsize}
 Funkcja $MD$ ($MaxDiversity$), funkcja celu której maximum poszukujemy przyjmuje zatem postaæ: 
 $$\text{MD}(A,X)= \sum_{i=1}^{n-1} \sum_{j=i+1} ^{n} d(\mathbf{x}_i,\mathbf{x}_j),$$ 
@@ -482,10 +484,10 @@ co daje prawdopodobienstwo wylosowania ekstremum równe
 $$P = \frac{\sum_{i=3}^n \binom{n}{i}}{2^n}\underset{n \to \infty}{\longrightarrow}=1$$
 \newpage
 \subsection{Max diversity}
-W przypadku funkcji $MaxDiversity$, zadanie polega na znalezieniu $m$-elementowego podzbioru $A$ danego zbioru $X$ (o mocy $k$). Rozwi¹zanie reprezentowane jest przez $k$-elementowy wektor binarny, przy czym jedynka na $i$-tej pozycji oznacza, ¿e $i$-ty element zbioru $X$ nale¿y do podzbioru $A$. 
+W przypadku funkcji $MaxDiversity$, zadanie polega na znalezieniu $m$--elementowego podzbioru $A$ danego zbioru $X$ (o mocy $k$). Rozwi¹zanie reprezentowane jest przez $k$--elementowy wektor binarny, przy czym jedynka na $i$-tej pozycji oznacza, ¿e $i$-ty element zbioru $X$ nale¿y do podzbioru $A$. 
 Ze wzglêdu na odmienn¹ naturê problemu, b³¹d rozwi¹zania bêdzie przedstawiany w skali procentowej. Wielkoœæ t¹ nale¿y rozumieæ jako odsetek poprawnie wyznaczonych rozwi¹zañ w 100 doœwiadczeniach. Podobnie jak w poprzednich testach, kryterium zatrzymania algorytmu jest znalezienie rozwi¹zania optymalnego, b¹dŸ wykonanie maksymalnej dopuszczalnej liczby iteracji (wówczas za rozwi¹zanie przyjmuje siê najlepszy uzyskany wynik). 
 \subsubsection{$X$ - wierzcho³ki kwadratu w przestrzeni 2-wymiarowej} 
-W zadaniu szukamy $n$-elementowego podzbioru zbioru wierzcho³ków 
+W zadaniu szukamy $n$--elementowego podzbioru zbioru wierzcho³ków 
 $$X=\{(0,0), (0,1), (1,0), (1,1)\},$$
 takiego, aby suma odleg³oœæ pomiêdzy punktami by³a najwiêksza. 
 \begin{enumerate}
@@ -510,8 +512,8 @@ gdzie $A=\{(0,0),\,(1,1) \}$ lub $A=\{(1,0),(0,1)\}$
 \end{table}
 %\textbf{Wnioski:}
 %-------------------------------------------------%
-\item W zbiorze $X$ szukamy 3-elementowego podzbioru $A$.\\  
-W tym przypadku, ka¿dy dowolny 3-elementowy podzbiór badanego problemu daje rozwi¹zanie optymalne $MD^{max}(A,X)= 2+\sqrt{2}$\\.  
+\item W zbiorze $X$ szukamy 3--elementowego podzbioru $A$.\\  
+W tym przypadku, ka¿dy dowolny 3--elementowy podzbiór badanego problemu daje rozwi¹zanie optymalne $MD^{max}(A,X)= 2+\sqrt{2}$\\.  
 Oba algorytmy zadzia³a³y poprawnie i zwróci³y dok³adne wartoœci ekstremum ju¿ na etapie losowania populacji startowej. W zwi¹zku z tym, nieistotny by³ dobór parametrów algorytmów, tj. liczebnoœci populacji i wspó³czynnika uczenia siê. 
 
 %\begin{table}[h!]
@@ -540,7 +542,7 @@ W zadaniu przyjêto, ¿e
 $X= \{ (0.5, -0.5),\,(0.4, 0.1),\,(-0.9, -0.1),\,(0.1,
    0.12),\,(-0.32, 0.14),\,(-0.1,
    0.58),$ \\ \indent$\,(0.911, 0.2),\,(-0.77, 0.58),\,(0.14, -0.85),\,(-0.14, -0.13)\}$
-   oraz ¿e w zbiorze $X$ poszukuje siê 3-elementowego podzbioru $A$.\\ 
+   oraz ¿e w zbiorze $X$ poszukuje siê 3--elementowego podzbioru $A$.\\ 
 \begin{figure}    
 \centering
 \includegraphics[scale=.7]{kula1.png} 
