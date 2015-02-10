@@ -1,0 +1,130 @@
+%& --translate-file=cp1250pl
+\documentclass[10pt,a5paper]{book}
+
+\usepackage{polski}
+
+
+
+\tolerance=5000
+\clubpenalty=100000
+\widowpenalty=10000
+
+%praca nowa d³ugoœæ
+\textheight=170mm
+\textwidth=118mm
+\topmargin=-20mm
+\oddsidemargin=-10mm
+\evensidemargin=-10mm
+
+\raggedbottom
+
+\usepackage{graphicx}
+
+\usepackage{indentfirst}
+\usepackage{sectsty}
+
+\sectionfont{\centering\large\normalfont}
+
+\subsectionfont{\centering\normalsize\normalfont}
+
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+
+
+\lhead{\begin{minipage}[b]{5.2cm} %11.8cm}
+\footnotesize IV Konferencja Zastosowañ Matematyki\\[-0.4ex]
+\footnotesize w~Technice, Informatyce i~Ekonomii\rule[-1ex]{1ex}{0ex}
+\end{minipage}}
+\chead{}
+\rhead{\begin{minipage}[b]{2.8cm}
+\footnotesize {\ }\\
+\footnotesize Gliwice, 18.09.2014~r.
+\end{minipage}}
+\lfoot{}
+\cfoot{\footnotesize\thepage}
+\rfoot{}
+\renewcommand{\headrulewidth}{0.4pt}
+\addtolength{\headheight}{12pt}
+
+
+
+\begin{document}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\pagebreak
+
+\vspace*{-1ex}
+
+\begin{center}
+\large\textbf{Porównanie wybranych algorytmów optymalizacyjnych z~modelem probabilistycznym}
+\end{center}
+\bigskip
+
+\centerline{\large{Anna Reichel$^1$, Iwona Nowak$^2$}}\label{reichel}
+\medskip
+
+\begin{center}
+\footnotesize{ $^{1}$Wydzia³‚ Matematyki Stosowanej, Politechnika Œl¹ska\\
+ul. Kaszubska 23, 44-100 Gliwice\\
+$^2$Instytut Matematyki, Politechnika Œl¹ska\\
+ul. Kaszubska 23, 44-100 Gliwice\\
+$^2$\texttt{Iwona.Nowak@polsl.pl}\\
+}
+\end{center}
+\vspace*{2ex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Streszczenie}
+
+W coraz liczniejszej grupie algorytmów populacyjnych, algorytmy wykorzystuj¹ce modele probabilistyczne zaczynaj¹ w ostatnim czasie
+odgrywaæ coraz wiêksz¹ rolê.
+S¹ to najczêœciej metody o strukturze bardzo podobnej do struktury algorytmu ewolucyjnego, 
+z~t¹ ró¿nic¹, ¿e kolejne pokolenia osobników/rozwi¹zañ generuje siê na bazie 
+modelu probabilistycznego populacji rozwi¹zañ obiecuj¹cych,
+nie zaœ jako efekt krzy¿owania b¹dŸ mutacji osobników z populacji bie¿¹cej.
+
+W pracy zaprezentowano dwie wersje algorytmów z modelem populacyjnym: algorytm PBIL (ang. Population-Based Incremental Learning)
+oraz cGA (ang. Compact Genetic Algorithm) [1,2,3]. Dzia³anie obu metod porównano na wybranych funkcjach testowych.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Bibliografia}
+
+\begin{list}{}{\itemindent=0pt
+\labelwidth=15pt
+\leftmargin=20pt
+\labelsep=5pt}
+
+\item[1.]
+G.R. Harik, F.G. Lobo, D.E. Goldberg,
+\textit{The compact genetic algorithm},
+IEEE Transactions on Evolutionary Computation \textbf{3}, no.~4 (1999), 287--297.
+
+\item[2.]
+F.O.~Karray, C.~de Silva, 
+\textit{Soft Computing and Intelligent Systems Design},
+Addison Wesley, New York 2004.
+
+\item[3.]
+M.~Pelikan,
+\textit{Bayesian Optimization Algoritm: from single level to hierarchy},
+PhD Thesis, University of Illinois at Urbana-Champaign, 2002.
+
+\end{list}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

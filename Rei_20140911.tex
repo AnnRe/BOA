@@ -37,7 +37,11 @@ Obie metody testowane bêd¹ na funkcjach, których optimum poszukuje siê w zbiorze
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Przegl¹d literatury}
 
-W pracy zaprezentowane zostan¹ dwie wersje algorytmów z modelem probabilistycznym \textit{PBIL} (\textit{ang. Population-based incremental learning}) oraz \textit{cGA} (\textit{ang. Compact Genetic Algorithm}). Obie metody s¹ heurystykami populacyjnymi, które rozwa¿aj¹ populacjê w procesie iteracyjnym.
+W pracy zaprezentowane zostan¹ dwie wersje algorytmów z modelem probabilistycznym \textit{PBIL} (\textit{ang. Population-based incremental learning })oraz cGA (\textit{ang. Compact Genetic Algorithm}). Obie metody s¹ heurystykami populacyjnymi, które rozwa¿aj¹ populacjê w procesie iteracyjnym.
+
+Kuo, Glover i Dhir w swoim artykule \cite{MDKuo} sformu³owali problem \textit{Max Diversity}, jednak nie rozwa¿ali jego optymalizacji w sposób algorytmiczny. Ich rozwa¿ania w artykule \cite{MDGallego} podjêli Gallego, Duarte, Laguna oraz Martí, szukaj¹c rozwa¿ania przybli¿onego przy u¿yciu \textit{scatter search procedure}.\\
+
+Martin Pelikan w jednym ze swoich artyku³ów \cite{Pelik2002} rozwa¿a miêdzy innymi \textit{cGA} oraz \textit{PBIL}, które zosta³y opisane w niniejszej pracy. Ka¿dy z opisanych algorytmów zosta³ poddany testom przez optymalizacjê problemów \textit{trap\_n} oraz \textit{3-deceptive}. G³ównym celem jego pracy by³o porówanie rezultatów optymalizacji.\\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{PBIL}
@@ -492,5 +496,28 @@ W tabeli poni¿ej zaprezentowano wyniki uzyskane w eksperymentach numerycznych:
 \textbf{Podsumowanie:} Optymalizacja ostatniej funkcji testowej, zarówno przy zastosowaniu cGa jak i PBIL przebiega³a w zadowalaj¹cy sposób. Przy odpowiednio licznej populacji, za ka¿dym razem uda³o siê znaleŸæ ekstremum globalne. Mniejsza liczba osobników wymaga ni¿szych wartoœci wspó³czynnika uczenia siê, w przypadku stosowania PBIL. Warto pamiêtaæ, ¿e niekorzystna konfiguracja parametrów obni¿a wiarygodnoœæ wyniku. 
 
 Porównuj¹c czas pracy algorytmów, nale¿y pamiêtaæ, ¿e \textit{cGA} zwraca rezultat w krótszym czasie ni¿ \textit{PBIL}. Zarówno wysoki, jak i bardzo niski wskaŸnik uczenia siê  algorytmu \textit{PBIL} zmniejsza efektywnoœæ pracy algorytmu. Z testów wynika, ¿e najbardziej optymaln¹ wartoœci¹ wspó³czynnika uczenia siê jest $0.1$. Wówczas rezultaty uzyskane przy stosowaniu \textit{cGA} i \textit{PBIL} s¹ zbli¿one.
+
+\begin{thebibliography}{1}
+
+\bibitem{MDKuo}
+C.-C. Kuo, F.~Glover, and K.S. Dhir.
+\newblock Analyzing and modeling the maximum diversity problem by zero-one
+  programming.
+\newblock {\em Decission Sciences}, page 1171–1185, November 1993.
+
+\bibitem{MDGallego}
+M.Gallego, A.~Duarte, M.~Laguna, and R.~Marti.
+\newblock Hybrid heuristics for the maximum diversity problem.
+\newblock {\em Springer Science+Business Media}, 44:411--426, December 2007.
+
+\bibitem{Pelik2002}
+M.~Pelikan.
+\newblock {\em Bayesian optimization algorithm: From single level to
+  hierarchy}.
+\newblock PhD thesis, University of Illinois at Urbana-Champaign, Urbana,
+  Illinois, 2002.
+
+\end{thebibliography}
+
 
 \end{document}

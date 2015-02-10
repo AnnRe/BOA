@@ -1,0 +1,21 @@
+\begin{thebibliography}{1}
+
+\bibitem{MDKuo}
+C.-C. Kuo, F.~Glover, and K.S. Dhir.
+\newblock Analyzing and modeling the maximum diversity problem by zero-one
+  programming.
+\newblock {\em Decission Sciences}, page 1171–1185, November 1993.
+
+\bibitem{MDGallego}
+M.Gallego, A.~Duarte, M.~Laguna, and R.~Marti.
+\newblock Hybrid heuristics for the maximum diversity problem.
+\newblock {\em Springer Science+Business Media}, 44:411--426, December 2007.
+
+\bibitem{Pelik2002}
+M.~Pelikan.
+\newblock {\em Bayesian optimization algorithm: From single level to
+  hierarchy}.
+\newblock PhD thesis, University of Illinois at Urbana-Champaign, Urbana,
+  Illinois, 2002.
+
+\end{thebibliography}
